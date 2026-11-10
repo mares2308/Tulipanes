@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campo de Tulipanes con Nubes y Sol</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Cielo al atardecer suave */
+            background: linear-gradient(to bottom, #4a3b69, #6b4c7d, #9d5c83, #e5989b);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            position: absolute;
+            top: 5%;
+            color: #ffffff;
+            font-weight: 300;
+            letter-spacing: 4px;
+            font-size: 2rem;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            animation: aparecerTexto 2s ease-in-out;
+            z-index: 50;
+            text-align: center;
+        }
+
+        @keyframes aparecerTexto {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Sol y Resplandor --- */
+        .sol {
+            position: absolute;
+            top: 40px;
+            right: 12%;
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle, #fff3b0 30%, #ffc6ff 70%, rgba(255, 255, 255, 0) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 40px #fff3b0, 0 0 80px #ffb5a7;
+            z-index: 2;
+            animation: resplandor 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes resplandor {
+            0% { transform: scale(1); box-shadow: 0 0 35px #fff3b0, 0 0 70px #ffb5a7; }
+            100% { transform: scale(1.08); box-shadow: 0 0 50px #fff3b0, 0 0 100px #ffc6ff; }
+        }
+
+        /* --- Nubes en Movimiento --- */
+        .nube {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 50px;
+            z-index: 3;
+            animation: moverNubes linear infinite;
+        }
+
+        .nube::before, .nube::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 50%;
+        }
+
+        /* Nube 1 */
+        .nube-1 {
+            top: 70px;
+            width: 140px;
+            height: 45px;
+            animation-duration: 35s;
+        }
+        .nube-1::before { width: 50px; height: 50px; top: -20px; left: 20px; }
+        .nube-1::after { width: 65px; height: 65px; top: -30px; left: 55px; }
+
+        /* Nube 2 */
+        .nube-2 {
+            top: 130px;
+            width: 180px;
+            height: 55px;
+            opacity: 0.85;
+            animation-duration: 25s;
+            animation-delay: -10s;
+        }
+        .nube-2::before { width: 65px; height: 65px; top: -25px; left: 25px; }
+        .nube-2::after { width: 80px; height: 80px; top: -38px; left: 70px; }
+
+        /* Nube 3 */
+        .nube-3 {
+            top: 40px;
+            width: 120px;
+            height: 40px;
+            opacity: 0.65;
+            animation-duration: 45s;
+            animation-delay: -22s;
+        }
+        .nube-3::before { width: 45px; height: 45px; top: -18px; left: 15px; }
+        .nube-3::after { width: 55px; height: 55px; top: -25px; left: 45px; }
+
+        @keyframes moverNubes {
+            from { left: -220px; }
+            to { left: 100vw; }
+        }
+
+        /* --- Paisaje de Montañas --- */
+        .paisaje {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .montana-fondo {
+            position: absolute;
+            bottom: 180px;
+            left: -10%;
+            width: 120%;
+            height: 280px;
+            background: #253326;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .montana-media {
+            position: absolute;
+            bottom: 90px;
+            right: -20%;
+            width: 140%;
+            height: 240px;
+            background: #1b4332;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .colina-frente {
+            position: absolute;
+            bottom: -60px;
+            left: -10%;
+            width: 120%;
+            height: 230px;
+            background: #2d6a4f;
+            border-radius: 50% 50% 0 0;
+            z-index: 4;
+        }
+
+        /* --- Contenedor del Campo --- */
+        .campo {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            height: 280px;
+            z-index: 10;
+        }
+
+        /* --- Estructura Base del Tulipán --- */
+        .tulipan {
+            position: absolute;
+            bottom: 10px;
+            width: 45px;
+            height: 190px;
+            transform-origin: bottom center;
+            animation: 
+                brotarNatural 2.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                balanceo 3.5s ease-in-out infinite alternate;
+            opacity: 0;
+        }
+
+        /* Animación inicial de crecimiento */
+        @keyframes brotarNatural {
+            0% {
+                transform: scaleY(0) scaleX(0.2) translateY(30px);
+                opacity: 0;
+            }
+            60% {
+                opacity: 1;
+            }
+            100% {
+                transform: scaleY(var(--escala, 1)) scaleX(var(--escala, 1)) rotate(var(--rotacion, 0deg)) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animación continua de brisa */
+        @keyframes balanceo {
+            0% {
+                transform: scaleY(var(--escala, 1)) scaleX(var(--escala, 1)) rotate(calc(var(--rotacion, 0deg) - 2.5deg));
+            }
+            100% {
+                transform: scaleY(var(--escala, 1)) scaleX(var(--escala, 1)) rotate(calc(var(--rotacion, 0deg) + 2.5deg));
+            }
+        }
+
+        /* Cabeza de la flor */
+        .cabeza-flor {
+            position: absolute;
+            top: 0;
+            left: 5px;
+            width: 32px;
+            height: 48px;
+            z-index: 3;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
+        }
+
+        .petalo-centro {
+            position: absolute;
+            top: 0;
+            left: 7px;
+            width: 18px;
+            height: 46px;
+            background: var(--color-flor);
+            border-radius: 50% 50% 40% 40%;
+            z-index: 2;
+        }
+
+        .petalo-izquierdo {
+            position: absolute;
+            top: 3px;
+            left: 1px;
+            width: 15px;
+            height: 40px;
+            background: var(--color-claro);
+            border-radius: 60% 40% 40% 60%;
+            transform: rotate(-16deg);
+            z-index: 1;
+        }
+
+        .petalo-derecho {
+            position: absolute;
+            top: 3px;
+            right: 1px;
+            width: 15px;
+            height: 40px;
+            background: var(--color-claro);
+            border-radius: 40% 60% 60% 40%;
+            transform: rotate(16deg);
+            z-index: 1;
+        }
+
+        /* Tallo */
+        .tallo {
+            position: absolute;
+            top: 38px;
+            left: 18px;
+            width: 4px;
+            height: 150px;
+            background: linear-gradient(to right, #52b788, #40916c);
+            border-radius: 2px;
+        }
+
+        /* Hojas */
+        .hoja-izq {
+            position: absolute;
+            top: 80px;
+            left: -4px;
+            width: 17px;
+            height: 52px;
+            background: #40916c;
+            border-radius: 0% 100% 30% 70%;
+            transform: rotate(-30deg);
+        }
+
+        .hoja-der {
+            position: absolute;
+            top: 100px;
+            left: 19px;
+            width: 17px;
+            height: 46px;
+            background: #2d6a4f;
+            border-radius: 100% 0% 70% 30%;
+            transform: rotate(28deg);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Un hermoso campo de tulipanes para ti 🌷</h1>
+
+    <!-- Sol -->
+    <div class="sol"></div>
+
+    <!-- Nubes en movimiento -->
+    <div class="nube nube-1"></div>
+    <div class="nube nube-2"></div>
+    <div class="nube nube-3"></div>
+
+    <!-- Paisaje de fondo -->
+    <div class="paisaje">
+        <div class="montana-fondo"></div>
+        <div class="montana-media"></div>
+        <div class="colina-frente"></div>
+    </div>
+
+    <!-- Campo con tulipanes lilas y rosados meciéndose -->
+    <div class="campo">
+        <!-- Fila 1 (Fondo) -->
+        <div class="tulipan" style="left: 2%; bottom: 45px; z-index: 5; --color-flor: #b5179e; --color-claro: #d883ff; --escala: 0.75; --rotacion: -5deg; animation-delay: 0.1s, 2.3s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 6%; bottom: 50px; z-index: 6; --color-flor: #ff70a6; --color-claro: #ffb3c6; --escala: 0.78; --rotacion: 4deg; animation-delay: 0.4s, 2.6s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 11%; bottom: 42px; z-index: 5; --color-flor: #7209b7; --color-claro: #c77dff; --escala: 0.8; --rotacion: -2deg; animation-delay: 0.7s, 2.9s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 16%; bottom: 55px; z-index: 7; --color-flor: #ff4d6d; --color-claro: #ff85a1; --escala: 0.82; --rotacion: 6deg; animation-delay: 0.2s, 2.4s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 21%; bottom: 40px; z-index: 5; --color-flor: #a2d2ff; --color-claro: #e0aaff; --escala: 0.76; --rotacion: -6deg; animation-delay: 0.9s, 3.1s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 26%; bottom: 48px; z-index: 6; --color-flor: #c77dff; --color-claro: #e0aaff; --escala: 0.85; --rotacion: 3deg; animation-delay: 0.5s, 2.7s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 31%; bottom: 44px; z-index: 5; --color-flor: #f72585; --color-claro: #ff9ebb; --escala: 0.78; --rotacion: -4deg; animation-delay: 0.8s, 3.0s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 36%; bottom: 52px; z-index: 6; --color-flor: #ff758f; --color-claro: #ffb3c6; --escala: 0.82; --rotacion: 5deg; animation-delay: 0.3s, 2.5s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 41%; bottom: 41px; z-index: 5; --color-flor: #560bad; --color-claro: #b5179e; --escala: 0.75; --rotacion: -3deg; animation-delay: 0.6s, 2.8s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 46%; bottom: 49px; z-index: 6; --color-flor: #ffb3c6; --color-claro: #ffe5ec; --escala: 0.83; --rotacion: 2deg; animation-delay: 1.1s, 3.3s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 51%; bottom: 46px; z-index: 6; --color-flor: #9d4edd; --color-claro: #e0aaff; --escala: 0.8; --rotacion: -5deg; animation-delay: 0.2s, 2.4s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 56%; bottom: 53px; z-index: 7; --color-flor: #ff4d6d; --color-claro: #ff85a1; --escala: 0.86; --rotacion: 4deg; animation-delay: 0.7s, 2.9s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 61%; bottom: 43px; z-index: 5; --color-flor: #b5179e; --color-claro: #e0aaff; --escala: 0.77; --rotacion: -2deg; animation-delay: 0.4s, 2.6s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 66%; bottom: 50px; z-index: 6; --color-flor: #ff70a6; --color-claro: #ffc2d1; --escala: 0.84; --rotacion: 6deg; animation-delay: 0.9s, 3.1s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 71%; bottom: 45px; z-index: 5; --color-flor: #7209b7; --color-claro: #d883ff; --escala: 0.79; --rotacion: -6deg; animation-delay: 0.5s, 2.7s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 76%; bottom: 52px; z-index: 7; --color-flor: #f72585; --color-claro: #ff758f; --escala: 0.88; --rotacion: 3deg; animation-delay: 0.8s, 3.0s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 81%; bottom: 42px; z-index: 5; --color-flor: #c77dff; --color-claro: #ffe5ec; --escala: 0.76; --rotacion: -4deg; animation-delay: 0.3s, 2.5s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 86%; bottom: 48px; z-index: 6; --color-flor: #ff758f; --color-claro: #ffb3c6; --escala: 0.82; --rotacion: 5deg; animation-delay: 1.0s, 3.2s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 91%; bottom: 40px; z-index: 5; --color-flor: #9d4edd; --color-claro: #c77dff; --escala: 0.75; --rotacion: -3deg; animation-delay: 0.6s, 2.8s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+
+        <!-- Fila 2 (Primer plano) -->
+        <div class="tulipan" style="left: 4%; bottom: 10px; z-index: 15; --color-flor: #ff70a6; --color-claro: #ffc2d1; --escala: 1.05; --rotacion: 3deg; animation-delay: 0.3s, 2.5s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 12%; bottom: 15px; z-index: 18; --color-flor: #f72585; --color-claro: #ff758f; --escala: 1.15; --rotacion: -4deg; animation-delay: 0.7s, 2.9s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 20%; bottom: 8px; z-index: 14; --color-flor: #c77dff; --color-claro: #e0aaff; --escala: 1.0; --rotacion: 5deg; animation-delay: 0.2s, 2.4s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 28%; bottom: 18px; z-index: 20; --color-flor: #7209b7; --color-claro: #b5179e; --escala: 1.2; --rotacion: -6deg; animation-delay: 0.5s, 2.7s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 36%; bottom: 12px; z-index: 16; --color-flor: #ff4d6d; --color-claro: #ff85a1; --escala: 1.08; --rotacion: 4deg; animation-delay: 0.9s, 3.1s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 44%; bottom: 5px; z-index: 13; --color-flor: #e0aaff; --color-claro: #ffe5ec; --escala: 0.95; --rotacion: -2deg; animation-delay: 0.4s, 2.6s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 52%; bottom: 16px; z-index: 19; --color-flor: #b5179e; --color-claro: #f72585; --escala: 1.12; --rotacion: 5deg; animation-delay: 0.8s, 3.0s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 60%; bottom: 10px; z-index: 15; --color-flor: #ff758f; --color-claro: #ffb3c6; --escala: 1.02; --rotacion: -5deg; animation-delay: 0.1s, 2.3s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 68%; bottom: 14px; z-index: 17; --color-flor: #9d4edd; --color-claro: #d883ff; --escala: 1.1; --rotacion: 2deg; animation-delay: 0.6s, 2.8s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 76%; bottom: 6px; z-index: 13; --color-flor: #560bad; --color-claro: #c77dff; --escala: 0.98; --rotacion: -3deg; animation-delay: 1.0s, 3.2s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 84%; bottom: 15px; z-index: 18; --color-flor: #ff70a6; --color-claro: #ffb3c6; --escala: 1.14; --rotacion: 6deg; animation-delay: 0.3s, 2.5s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+        <div class="tulipan" style="left: 92%; bottom: 10px; z-index: 15; --color-flor: #f72585; --color-claro: #ff85a1; --escala: 1.05; --rotacion: -4deg; animation-delay: 0.7s, 2.9s;">
+            <div class="cabeza-flor"><div class="petalo-centro"></div><div class="petalo-izquierdo"></div><div class="petalo-derecho"></div></div><div class="tallo"></div><div class="hoja-izq"></div><div class="hoja-der"></div>
+        </div>
+    </div>
+
+</body>
+</html>
